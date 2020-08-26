@@ -6,6 +6,10 @@
  */
 package com.example.ral.demo.service;
 
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
 /**
  * WebService
  * @description WebService
@@ -13,6 +17,11 @@ package com.example.ral.demo.service;
  * @date 2020/8/26 14:59
  * @version 1.0
  */
+@Service
 public class WebService {
 
+    public String getUuid() {
+
+        return UUID.randomUUID().toString().toLowerCase();
+    }
 }
