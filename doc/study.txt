@@ -1,0 +1,84 @@
+SpringBoot远程调试（address 是开启远程端口，本地通过监听这个端口来实现远程调试）
+1.java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9090 xxx.jar
+
+
+------------------------------------------
+idea连接docker：
+1.修改docker.service,开启2375端口;
+vim /usr/lib/systemd/system/docker.service
+
+2.ExecStart末尾增加 ：按"i"插入，按"Esc"退出，输入":wq" 完成文件写入;
+# 允许所有客户端连接
+-H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock
+
+3.重新加载配置文件和重启Docker：
+systemctl daemon-reload 
+systemctl restart docker 
+
+4.防火墙开放2375端口号
+firewall-cmd --zone=public --add-port=2375/tcp --permanent
+
+5.重启防火墙
+firewall-cmd --reload
+
+------------------------------------------
+docker修改镜像拉取地址为国内地址：
+1.vim /etc/docker/daemon.json
+
+格式：
+{
+"registry-mirrors": [
+"https://kfwkfulq.mirror.aliyuncs.com",
+"https://2lqq34jg.mirror.aliyuncs.com",
+"https://pee6w651.mirror.aliyuncs.com",
+"https://registry.docker-cn.com",
+"http://hub-mirror.c.163.com"
+],
+"dns": ["8.8.8.8","8.8.4.4"]
+}
+
+具体地址：
+#https://registry.docker-cn.com
+#http://hub-mirror.c.163.com
+#https://3laho3y3.mirror.aliyuncs.com
+#http://f1361db2.m.daocloud.io
+#https://mirror.ccs.tencentyun.com
+
+2.重新加载配置文件和重启Docker：
+systemctl daemon-reload 
+systemctl restart docker
+
+
+------------------------------------------
+docker安装并持久化pg数据库 
+1.docker search postgres
+
+2.docker pull postgres:9.6
+
+3.创建本地卷
+docker volume create pgdata
+
+4.启动容器：启动时，需要将刚上个步骤创建的卷 pgdata 挂载到容器的 /var/lib/postgresql/data 目录
+docker run --name 服务名 -e POSTGRES_PASSWORD=password -p 5432:5432 -v pgdata:/var/lib/postgresql/data -d 镜像ID
+
+
+------------------------------------------
+docker的一些命令：
+---重启docker
+systemctl daemon-reload
+systemctl restart docker
+
+---查看docker是否运行成功
+ps -ef |grep docker
+
+---docker查看本地镜像
+dicker image ls
+
+---docker进入容器
+docker exec -it 镜像名 /bin/bash
+
+---退出容器
+exit
+
+
+
