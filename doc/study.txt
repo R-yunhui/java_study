@@ -180,3 +180,42 @@ docker run --name rabbitmq3.7.7 -p 5672:5672 -p 15672:15672 -v `pwd`/data:/var/l
 --hostname  主机名（RabbitMQ的一个重要注意事项是它根据所谓的 “节点名称” 存储数据，默认为主机名）；
 
 -e 指定环境变量；（RABBITMQ_DEFAULT_VHOST：默认虚拟机名；RABBITMQ_DEFAULT_USER：默认的用户名；RABBITMQ_DEFAULT_PASS：默认用户名的密码）
+
+------------------------------------------
+docker启动redis
+创建配置目录和数据目录  mkdir -p /root/docker/redis/conf  mkdir -p /root/docker/redis/data
+docker run -d --privileged=true -p 6379:6379 --restart always -v /root/docker/redis/conf/redis.conf:/etc/redis/redis.conf -v /root/docker/redis/data:/data --name myredis redis redis-server /etc/redis/redis.conf --appendonly yes
+
+-d                                                  -> 以守护进程的方式启动容器
+-p 6379:6379                                        -> 绑定宿主机端口
+--name myredis                                      -> 指定容器名称
+--restart always                                    -> 开机启动
+--privileged=true                                   -> 提升容器内权限
+-v /root/docker/redis/conf:/etc/redis/redis.conf    -> 映射配置文件
+-v /root/docker/redis/data:/data                    -> 映射数据目录
+--appendonly yes                                    -> 开启数据持久化
+
+
+------------------------------------------
+启动consul
+docker run -d --restart=always -p 8500:8500 -v /data/consul:/consul/data -e CONSUL_BIND_INTERFACE='eth0' --name=consul-server consul agent -server -bootstrap -ui -client='0.0.0.0'
+
+agent: 表示启动 agent 进程
+server: 表示 consul 为 server 模式
+client: 表示 consul 为 client 模式
+bootstrap: 表示这个节点是 Server-Leader
+--restart=always:Docker 重启时,容器自动启动，如开始未指定，可以使用命令:
+docker container update --restart=always 容器名字,进行修改。
+ui: 启动 Web UI, 默认端口 8500
+node: 指定节点名称, 集群中节点名称唯一
+client: 绑定客户端接口地址, 0.0.0.0 表示所有地址都可以访问
+–net=host docker参数, 使得docker容器越过了netnamespace的隔离，免去手动指定端口映射的步骤
+-server consul支持以server或client的模式运行, server是服务发现模块的核心, client主要用于转发请求
+-advertise 将本机私有IP传递到consul
+-bootstrap-expect 指定consul将等待几个节点连通，成为一个完整的集群
+-retry-join 指定要加入的consul节点地址，失败会重试, 可多次指定不同的地址
+-client consul绑定在哪个client地址上，这个地址提供HTTP、DNS、RPC等服务，默认是127.0.0.1
+-bind 该地址用来在集群内部的通讯，集群内的所有节点到地址都必须是可达的，默认是0.0.0.0
+-allow_stale 设置为true, 表明可以从consul集群的任一server节点获取dns信息, false则表明每次请求都会经过consul server leader
+--name DOCKER容器的名称
+-client 0.0.0.0 表示任何地址可以访问。
