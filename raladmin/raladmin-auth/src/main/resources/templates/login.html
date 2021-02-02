@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+</head>
+<body>
+<h2>登录页面</h2>
+<form action="/auth-web/api/v1/user/userLogin" method="post">
+    <table>
+        <tr>
+            <td>用户名</td>
+            <td><label>
+                <input type="text" name="username">
+            </label></td>
+        </tr>
+
+        <tr>
+            <td>密码</td>
+            <td><label>
+                <input type="password" name="password">
+            </label></td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="登录">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ral.admin.auth.dao.RoleDao">
+    <resultMap id="BaseResultMap" type="com.ral.admin.auth.pojo.RoleDo">
+        <id column="role_id" jdbcType="CHAR" property="roleId"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="authority_codes" jdbcType="VARCHAR" property="authorityCodes"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_user" jdbcType="CHAR" property="createUser"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_user" jdbcType="CHAR" property="updateUser"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="modify_method" jdbcType="INTEGER" property="modifyMethod"/>
+    </resultMap>
+
+    <!-- 角色权限 ResultMap -->
+    <resultMap id="RoleAuthorityResultMap" type="com.ral.admin.auth.pojo.RoleDo">
+        <id column="role_id" jdbcType="CHAR" property="roleId"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="authority_codes" jdbcType="VARCHAR" property="authorityCodes"/>
+
+        <!-- 一对多
+         property:填写pojo类中集合类属性的名称
+         ofType:集合里面的pojo对象
+        -->
+        <collection property="authorityDoList" ofType="com.ral.admin.auth.pojo.AuthorityDo">
+            <id column="authority_id" jdbcType="INTEGER" property="authorityId"/>
+            <result column="authority_code" jdbcType="VARCHAR" property="authorityCode"/>
+            <result column="description" jdbcType="VARCHAR" property="description"/>
+            <result column="status" jdbcType="INTEGER" property="status"/>
+            <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+            <result column="create_user" jdbcType="CHAR" property="createUser"/>
+            <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+            <result column="update_user" jdbcType="CHAR" property="updateUser"/>
+            <result column="modify_method" jdbcType="INTEGER" property="modifyMethod"/>
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        role_id, role_name, authority_codes, `status`, create_user, create_time, update_user,
+    update_time, modity_method
+    </sql>
+    <select id="findByRoleIds" resultMap="RoleAuthorityResultMap">
+        select
+        r.role_id, r.role_name, r.authority_codes, a.authority_id, a.authority_code, a.description, a.status
+        from role r left join authority a on locate(r.authority_codes, a.authority_code)
+        where r.role_id in
+        <foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        and r.status = 1
+    </select>
+
+</mapper>
