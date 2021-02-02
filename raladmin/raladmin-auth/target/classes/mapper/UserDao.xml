@@ -3,6 +3,7 @@
 <mapper namespace="com.ral.admin.auth.dao.UserDao">
     <resultMap id="BaseResultMap" type="com.ral.admin.auth.pojo.UserDo">
         <id column="user_id" jdbcType="CHAR" property="userId"/>
+        <result column="role_ids" jdbcType="VARCHAR" property="roleIds"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="pass_word" jdbcType="VARCHAR" property="passWord"/>
         <result column="age" jdbcType="INTEGER" property="age"/>
@@ -16,9 +17,52 @@
         <result column="update_user" jdbcType="CHAR" property="updateUser"/>
         <result column="modify_method" jdbcType="INTEGER" property="modifyMethod"/>
     </resultMap>
+
+    <resultMap id="UserRoleResultMap" type="com.ral.admin.auth.pojo.UserDo">
+        <id column="user_id" jdbcType="CHAR" property="userId"/>
+        <result column="role_ids" jdbcType="CHAR" property="roleIds"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="pass_word" jdbcType="VARCHAR" property="passWord"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="gender" jdbcType="INTEGER" property="gender"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user" jdbcType="CHAR" property="createUser"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="update_user" jdbcType="CHAR" property="updateUser"/>
+        <result column="modify_method" jdbcType="INTEGER" property="modifyMethod"/>
+
+        <collection property="roleDoList" ofType="com.ral.admin.auth.pojo.RoleDo">
+            <id column="role_id" jdbcType="CHAR" property="roleId"/>
+            <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+            <result column="authority_codes" jdbcType="VARCHAR" property="authorityCodes"/>
+            <result column="status" jdbcType="INTEGER" property="status"/>
+            <result column="create_user" jdbcType="CHAR" property="createUser"/>
+            <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+            <result column="update_user" jdbcType="CHAR" property="updateUser"/>
+            <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+            <result column="modify_method" jdbcType="INTEGER" property="modifyMethod"/>
+        </collection>
+    </resultMap>
     <sql id="Base_Column_List">
-        user_id, user_name, pass_word, age, gender, email, phone_number, `status`, create_time,
+        user_id, role_ids, user_name, pass_word, age, gender, email, phone_number, `status`, create_time,
     create_user, update_time, update_user, modify_method
     </sql>
+
+    <select id="findUserByUserName" parameterType="java.lang.String" resultMap="UserRoleResultMap">
+        select u.user_name,
+               u.pass_word,
+               u.role_ids,
+               r.role_id,
+               r.authority_codes,
+               r.role_name,
+               r.status
+        from user u
+                 left join role r on locate(u.role_ids, r.role_id)
+        where u.user_name = #{username}
+          and u.status = 1
+    </select>
 
 </mapper>

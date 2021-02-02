@@ -25,11 +25,14 @@ public enum ApiResultEnum {
     /** 请求成功 */
     SUCCESS(HttpStatus.OK, 200, "OK"),
 
-    /** 请求错误 */
-    BAD_REQUEST(HttpStatus.BAD_REQUEST, 400, "Bad Request"),
+    /** 请求错误 (语义错误或参数错误) */
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, 400, "语义错误或请求参数错误"),
 
     /** 服务器端异常 */
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 500, "Internal Server Error"),;
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 500, "Internal Server Error"),
+
+    /** 认证失败 */
+    AUTHENTICATION_FAILED(HttpStatus.FORBIDDEN, 403, "认证失败，用户名或密码错误");
 
 
     /** HTTP 状态码 */

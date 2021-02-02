@@ -29,7 +29,14 @@ public interface IUserService {
      * @param userId 用户ID
      * @return 符合条件的用户信息
      */
-    UserDo findUserInfo(String userId);
+    UserDo findUserInfoByUserId(String userId);
+
+    /**
+     * 根据用户名获取用户信息
+     * @param username 用户名
+     * @return 符合条件的用户信息
+     */
+    UserDo findUserInfoByUserName(String username);
 
     /**
      * 用户通过用户名密码进行登录

@@ -12,4 +12,11 @@ import com.ral.admin.auth.pojo.UserDo;
  */
 public interface UserDao extends BaseMapper<UserDo> {
 
+    /**
+     * 通过用户名查询用户信息
+     * @param username 用户名
+     * @return 匹配的用户信息
+     */
+    UserDo findUserByUserName(String username);
+
 }

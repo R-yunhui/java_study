@@ -28,14 +28,14 @@ import io.swagger.annotations.ApiResponses;
 
 /**
  * UserController
- * @Description
+ * @Description 用户相关接口
  * @author renyunhui
  * @date 2021/2/1 17:14
  * @version 1.0
  */
 @RestController
 @RequestMapping(value = "/api/v1/user")
-@Api(tags = "用户", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(tags = "用户相关接口", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
     @Autowired
@@ -63,7 +63,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
     public BaseResult<UserDo> getUserInfo(@PathVariable(value = "userId") String userId) {
-        UserDo userDo = userService.findUserInfo(userId);
+        UserDo userDo = userService.findUserInfoByUserId(userId);
         return BaseResult.success(userDo);
     }
 
@@ -72,13 +72,13 @@ public class UserController {
             @ApiImplicitParam(name = "用户账号名", value = "注册的用户账号名", required = true, paramType = "path", dataType = "String"),
             @ApiImplicitParam(name = "用户密码", value = "注册的用户密码", required = true, paramType = "path", dataType = "String")
     })
-    @GetMapping(value = "/userLogin/{username}/{password}")
+    @PostMapping(value = "/userLogin")
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
             @ApiResponse(code = 400, message = "请求参数存在异常"),
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
-    public BaseResult<String> userLogin(@PathVariable(value = "username") String username, @PathVariable(value = "password") String password) {
+    public BaseResult<String> userLogin(String username, String password) {
         userService.userLogin(username, password);
         return BaseResult.success("登录成功");
     }

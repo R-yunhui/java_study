@@ -50,8 +50,13 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDo findUserInfo(String userId) {
+    public UserDo findUserInfoByUserId(String userId) {
         return userDao.selectById(userId);
+    }
+
+    @Override
+    public UserDo findUserInfoByUserName(String username) {
+        return userDao.findUserByUserName(username);
     }
 
     @Override
@@ -62,4 +67,5 @@ public class UserServiceImpl implements IUserService {
         List<UserDo> userDoList = userDao.selectByMap(paramMap);
         log.info("登录成功,登录的用户信息为：{}", JSONUtil.toJsonStr(userDoList));
     }
+
 }
