@@ -50,9 +50,17 @@ public class WebController {
         return "index";
     }
 
-    @GetMapping(value = "/test")
+    @GetMapping(value = "/testOne")
     @ResponseBody
-    public void test() {
+    public void testOne() {
+        UserDo userDo = userDao.findUserByUserName("admin");
+        RoleDo roleDo = roleDao.findByRoleIds(new String[]{"f79e706c79704c84a3825f5a640845a0"});
+        System.err.println(JSONUtil.toJsonStr(userDo) + "\n" + JSONUtil.toJsonStr(roleDo));
+    }
+
+    @GetMapping(value = "/testTwo")
+    @ResponseBody
+    public void testTwo() {
         UserDo userDo = userDao.findUserByUserName("admin");
         RoleDo roleDo = roleDao.findByRoleIds(new String[]{"f79e706c79704c84a3825f5a640845a0"});
         System.err.println(JSONUtil.toJsonStr(userDo) + "\n" + JSONUtil.toJsonStr(roleDo));

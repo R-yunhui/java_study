@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.ral.admin.auth.handler.MyAuthenticationFailureHandler;
+import com.ral.admin.auth.handler.MyAuthenticationProvider;
 import com.ral.admin.auth.handler.MyAuthenticationSuccessHandler;
 import com.ral.admin.auth.service.MyUserDetailServiceImpl;
 
@@ -40,20 +41,33 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     private MyAuthenticationSuccessHandler authenticationSuccessHandler;
     @Autowired
     private MyAuthenticationFailureHandler authenticationFailureHandler;
+    @Autowired
+    private MyAuthenticationProvider authenticationProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        // 开启跨域
+        http.cors().and()
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/index", "/").permitAll()
-                .antMatchers("/swagger-ui.html", "/druid/sql.html").hasRole("0001")
+                .antMatchers("/sayHello").hasRole("admin")
+                // 所有资源登录之后即可访问
+                .anyRequest().authenticated()
                 .and()
+                // 登录配置
                 .formLogin()
+                // 登录页面
                 .loginPage("/login")
-                .loginProcessingUrl("/api/v1/user/userLogin").permitAll()
-                .defaultSuccessUrl("/index")
+                // 请求地址
+                .loginProcessingUrl("/api/v1/user/userLogin")
+                // 自定义登录成功失败的处理方式
                 .successHandler(authenticationSuccessHandler)
-                .failureHandler(authenticationFailureHandler);
+                .failureHandler(authenticationFailureHandler)
+                // 默认的用户名,密码参数
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .permitAll();
     }
 
     /**
@@ -63,10 +77,11 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // 自行使用认证名称来查找对应的用户数据，然后交给Spring Security使用
-        auth.userDetailsService(userDetailService)
+        // 自定义MyAuthenticationProvider 装配到 AuthenticationManagerBuilder中
+        auth.authenticationProvider(authenticationProvider)
+                // 自行使用认证名称来查找对应的用户数据，然后交给Spring Security使用
+                .userDetailsService(userDetailService)
                 .passwordEncoder(passwordEncoder());
-
     }
 
     /** 密码加密方式 */

@@ -34,7 +34,6 @@ public enum ApiResultEnum {
     /** 认证失败 */
     AUTHENTICATION_FAILED(HttpStatus.FORBIDDEN, 403, "认证失败，用户名或密码错误");
 
-
     /** HTTP 状态码 */
     HttpStatus status;
 

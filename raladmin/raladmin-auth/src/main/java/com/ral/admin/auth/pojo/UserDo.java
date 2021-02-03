@@ -1,12 +1,8 @@
 package com.ral.admin.auth.pojo;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
@@ -26,7 +22,7 @@ import lombok.Data;
 @ApiModel(value = "用户信息表")
 @Data
 @TableName(value = "user")
-public class UserDo implements Serializable, UserDetails {
+public class UserDo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -118,40 +114,6 @@ public class UserDo implements Serializable, UserDetails {
     /** 对应的角色信息 */
     private List<RoleDo> roleDoList;
 
+    /** 对应的权限信息 */
     private List<AuthorityDo> authorityDoList;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorityDoList;
-    }
-
-    @Override
-    public String getPassword() {
-        return passWord;
-    }
-
-    @Override
-    public String getUsername() {
-        return userName;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
 }

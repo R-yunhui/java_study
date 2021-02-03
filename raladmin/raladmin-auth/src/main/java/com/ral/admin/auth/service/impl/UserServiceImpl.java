@@ -14,7 +14,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ral.admin.auth.dao.RoleDao;
 import com.ral.admin.auth.dao.UserDao;
+import com.ral.admin.auth.pojo.RoleDo;
 import com.ral.admin.auth.pojo.UserDo;
 import com.ral.admin.auth.service.IUserService;
 import com.ral.admin.common.CommonDefine;
@@ -36,6 +38,8 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private RoleDao roleDao;
 
     @Override
     public Integer registerUserInfo(UserDo userDo) {
@@ -56,7 +60,11 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserDo findUserInfoByUserName(String username) {
-        return userDao.findUserByUserName(username);
+        UserDo userDo = userDao.findUserByUserName(username);
+        // 根据用户所含的角色信息查询对应的权限信息
+        RoleDo roleDo = roleDao.findByRoleIds(userDo.getRoleIds().split(","));
+        userDo.setAuthorityDoList(roleDo.getAuthorityDoList());
+        return userDo;
     }
 
     @Override
