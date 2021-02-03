@@ -20,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.ral.admin.auth.handler.MyAuthenticationFailureHandler;
 import com.ral.admin.auth.handler.MyAuthenticationProvider;
 import com.ral.admin.auth.handler.MyAuthenticationSuccessHandler;
+import com.ral.admin.auth.handler.UrlAccessDecisionManager;
+import com.ral.admin.auth.handler.UrlAccessDeniedHandler;
 import com.ral.admin.auth.service.MyUserDetailServiceImpl;
 
 /**
@@ -43,6 +45,10 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     private MyAuthenticationFailureHandler authenticationFailureHandler;
     @Autowired
     private MyAuthenticationProvider authenticationProvider;
+    @Autowired
+    private UrlAccessDecisionManager urlAccessDecisionManager;
+    @Autowired
+    private UrlAccessDeniedHandler urlAccessDeniedHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

@@ -60,7 +60,7 @@ public class MyAuthenticationProvider extends AbstractUserDetailsAuthenticationP
         // 通过WebAuthenticationDetailsHandler获取用户输入的验证码信息
         UserDetailsBo userDetailsBo = (UserDetailsBo) userDetailService.loadUserByUsername(username);
         if (!password.equals(userDetailsBo.getPassword())) {
-            logger.info("用户输入的密码错误");
+            log.info("用户输入的密码错误");
             throw new BusinessException(ApiResultEnum.AUTHENTICATION_FAILED);
         }
 
