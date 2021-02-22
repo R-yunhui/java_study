@@ -5,12 +5,12 @@ import com.ral.admin.auth.pojo.AuthorityDo;
 
 /**
  * AuthorityDao
- * @Description AuthorityDao 权限持久层接口
+ * @Description: 权限信息持久层接口
+ *
  * @author renyunhui
- * @date 2021/2/1 15:50
+ * @date 2021/2/3 9:57
  * @version 1.0
  */
 public interface AuthorityDao extends BaseMapper<AuthorityDo> {
-
 
 }

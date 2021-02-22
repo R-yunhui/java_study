@@ -48,7 +48,7 @@ public class MyAuthenticationProvider extends AbstractUserDetailsAuthenticationP
     /**
      * 实现用户认证的方法
      * @param authentication 认证信息
-     * @return
+     * @return 认证信息
      * @throws AuthenticationException
      */
     @Override

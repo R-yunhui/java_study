@@ -3,7 +3,9 @@ package com.ral.admin.auth.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.springframework.security.core.GrantedAuthority;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,31 +13,41 @@ import lombok.Data;
 
 /**
  * AuthorityDo
- * @Description AuthorityDo 权限表
+ * @Description: 权限信息实体表
+ *
  * @author renyunhui
- * @date 2021/2/1 15:50
+ * @date 2021/2/3 9:57
  * @version 1.0
  */
 @ApiModel(value="权限表")
 @Data
-public class AuthorityDo implements Serializable, GrantedAuthority {
+@TableName(value = "db_authority")
+public class AuthorityDo implements Serializable {
+
+    /**
+     * 主键ID
+     */
+    @ApiModelProperty(value="主键ID")
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+
     /**
      * 权限ID
      */
     @ApiModelProperty(value="权限ID")
-    private Integer authorityId;
+    private String authorityId;
 
     /**
-     * 权限码
+     * 允许访问的url
      */
-    @ApiModelProperty(value="权限码")
-    private String authorityCode;
+    @ApiModelProperty(value="允许访问的url")
+    private String permissionUrl;
 
     /**
-     * 权限描述
+     * 备注
      */
-    @ApiModelProperty(value="权限描述")
-    private String description;
+    @ApiModelProperty(value="备注")
+    private String remark;
 
     /**
      * 状态  1 - 启用  2 - 禁用  3 - 已删除
@@ -67,16 +79,5 @@ public class AuthorityDo implements Serializable, GrantedAuthority {
     @ApiModelProperty(value="修改人")
     private String updateUser;
 
-    /**
-     * 修改方式  1 - 新增  2 - 修改
-     */
-    @ApiModelProperty(value="修改方式  1 - 新增  2 - 修改")
-    private Integer modifyMethod;
-
     private static final long serialVersionUID = 1L;
-
-    @Override
-    public String getAuthority() {
-        return authorityCode;
-    }
 }

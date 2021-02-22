@@ -30,7 +30,6 @@ public class UserDetailsBo extends UserDo implements UserDetails {
     public UserDetailsBo(UserDo userDo) {
         if (null != userDo) {
             this.setUserId(userDo.getUserId());
-            this.setRoleIds(userDo.getRoleIds());
             this.setUserName(userDo.getUserName());
             this.setPassWord(userDo.getPassWord());
             this.setAge(userDo.getAge());
@@ -38,14 +37,12 @@ public class UserDetailsBo extends UserDo implements UserDetails {
             this.setEmail(userDo.getEmail());
             this.setPhoneNumber(userDo.getPhoneNumber());
             this.setStatus(userDo.getAge());
-            this.setRoleDoList(userDo.getRoleDoList());
-            this.setAuthorityDoList(userDo.getAuthorityDoList());
         }
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getAuthorityDoList();
+        return null;
     }
 
     @Override
