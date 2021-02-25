@@ -219,3 +219,13 @@ client: 绑定客户端接口地址, 0.0.0.0 表示所有地址都可以访问
 -allow_stale 设置为true, 表明可以从consul集群的任一server节点获取dns信息, false则表明每次请求都会经过consul server leader
 --name DOCKER容器的名称
 -client 0.0.0.0 表示任何地址可以访问。
+
+
+linux docker启动minio
+创建具有永久存储的MinIO容器，您需要将本地持久目录从主机操作系统映射到虚拟配置~/.minio 并导出/data目录。 为此，请运行以下命令
+docker run -p 9000:9000 \
+  --name minio1 \
+  -v /mnt/data:/data \
+  -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" \
+  -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" \
+  minio/minio server /data
