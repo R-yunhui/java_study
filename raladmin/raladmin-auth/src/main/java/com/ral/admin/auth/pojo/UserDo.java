@@ -2,7 +2,6 @@ package com.ral.admin.auth.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
@@ -103,12 +102,6 @@ public class UserDo implements Serializable {
      */
     @ApiModelProperty(value="修改人")
     private String updateUser;
-
-    /**
-     * 修改方式 1 - 创建  2 - 修改
-     */
-    @ApiModelProperty(value = "修改方式 1 - 创建  2 - 修改")
-    private Integer modifyMethod;
 
     private static final long serialVersionUID = 1L;
 }

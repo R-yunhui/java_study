@@ -1,182 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ral.admin.auth.dao.UserDao">
-  <resultMap id="BaseResultMap" type="com.ral.admin.auth.pojo.UserDo">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="user_id" jdbcType="CHAR" property="userId" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="pass_word" jdbcType="VARCHAR" property="passWord" />
-    <result column="age" jdbcType="INTEGER" property="age" />
-    <result column="gender" jdbcType="INTEGER" property="gender" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="create_user" jdbcType="CHAR" property="createUser" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="update_user" jdbcType="CHAR" property="updateUser" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, user_id, user_name, pass_word, age, gender, email, phone_number, `status`, create_time, 
+    <resultMap id="BaseResultMap" type="com.ral.admin.auth.pojo.UserDo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="CHAR" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="pass_word" jdbcType="VARCHAR" property="passWord"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="gender" jdbcType="INTEGER" property="gender"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user" jdbcType="CHAR" property="createUser"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="update_user" jdbcType="CHAR" property="updateUser"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, user_id, user_name, pass_word, age, gender, email, phone_number, `status`, create_time,
     create_user, update_time, update_user
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from db_user
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from db_user
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ral.admin.auth.pojo.UserDo" useGeneratedKeys="true">
-    insert into db_user (user_id, user_name, pass_word, 
-      age, gender, email, 
-      phone_number, `status`, create_time, 
-      create_user, update_time, update_user
-      )
-    values (#{userId,jdbcType=CHAR}, #{userName,jdbcType=VARCHAR}, #{passWord,jdbcType=VARCHAR}, 
-      #{age,jdbcType=INTEGER}, #{gender,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, 
-      #{phoneNumber,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createUser,jdbcType=CHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=CHAR}
-      )
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ral.admin.auth.pojo.UserDo" useGeneratedKeys="true">
-    insert into db_user
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="userName != null">
-        user_name,
-      </if>
-      <if test="passWord != null">
-        pass_word,
-      </if>
-      <if test="age != null">
-        age,
-      </if>
-      <if test="gender != null">
-        gender,
-      </if>
-      <if test="email != null">
-        email,
-      </if>
-      <if test="phoneNumber != null">
-        phone_number,
-      </if>
-      <if test="status != null">
-        `status`,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="createUser != null">
-        create_user,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-      <if test="updateUser != null">
-        update_user,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        #{userId,jdbcType=CHAR},
-      </if>
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="passWord != null">
-        #{passWord,jdbcType=VARCHAR},
-      </if>
-      <if test="age != null">
-        #{age,jdbcType=INTEGER},
-      </if>
-      <if test="gender != null">
-        #{gender,jdbcType=INTEGER},
-      </if>
-      <if test="email != null">
-        #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="phoneNumber != null">
-        #{phoneNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createUser != null">
-        #{createUser,jdbcType=CHAR},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateUser != null">
-        #{updateUser,jdbcType=CHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ral.admin.auth.pojo.UserDo">
-    update db_user
-    <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=CHAR},
-      </if>
-      <if test="userName != null">
-        user_name = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="passWord != null">
-        pass_word = #{passWord,jdbcType=VARCHAR},
-      </if>
-      <if test="age != null">
-        age = #{age,jdbcType=INTEGER},
-      </if>
-      <if test="gender != null">
-        gender = #{gender,jdbcType=INTEGER},
-      </if>
-      <if test="email != null">
-        email = #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="phoneNumber != null">
-        phone_number = #{phoneNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createUser != null">
-        create_user = #{createUser,jdbcType=CHAR},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateUser != null">
-        update_user = #{updateUser,jdbcType=CHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.ral.admin.auth.pojo.UserDo">
-    update db_user
-    set user_id = #{userId,jdbcType=CHAR},
-      user_name = #{userName,jdbcType=VARCHAR},
-      pass_word = #{passWord,jdbcType=VARCHAR},
-      age = #{age,jdbcType=INTEGER},
-      gender = #{gender,jdbcType=INTEGER},
-      email = #{email,jdbcType=VARCHAR},
-      phone_number = #{phoneNumber,jdbcType=VARCHAR},
-      `status` = #{status,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      create_user = #{createUser,jdbcType=CHAR},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      update_user = #{updateUser,jdbcType=CHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+    </sql>
+
+    <select id="findUserByUserName" resultType="com.ral.admin.auth.pojo.UserDo" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from db_user
+        where user_name = #{username,jdbcType=INTEGER}
+    </select>
+
 </mapper>

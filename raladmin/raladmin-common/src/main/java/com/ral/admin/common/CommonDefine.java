@@ -17,10 +17,4 @@ public class CommonDefine {
 
     private CommonDefine() {
     }
-
-    /** 最后修改方式 - 新增 */
-    public static final Integer LAST_MODIFIED_METHOD_CREATE = 1;
-
-    /** 最后修改方式 - 修改 */
-    public static final Integer LAST_MODIFIED_METHOD_UPDATE = 2;
 }

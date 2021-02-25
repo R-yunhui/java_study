@@ -16,10 +16,8 @@ import org.springframework.stereotype.Service;
 
 import com.ral.admin.auth.dao.RoleDao;
 import com.ral.admin.auth.dao.UserDao;
-import com.ral.admin.auth.pojo.RoleDo;
 import com.ral.admin.auth.pojo.UserDo;
 import com.ral.admin.auth.service.IUserService;
-import com.ral.admin.common.CommonDefine;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONUtil;
@@ -49,7 +47,6 @@ public class UserServiceImpl implements IUserService {
         userDo.setUpdateUser("admin");
         userDo.setCreateTime(date);
         userDo.setUpdateTime(date);
-        userDo.setModifyMethod(CommonDefine.LAST_MODIFIED_METHOD_CREATE);
         return userDao.insert(userDo);
     }
 
@@ -62,8 +59,6 @@ public class UserServiceImpl implements IUserService {
     public UserDo findUserInfoByUserName(String username) {
         UserDo userDo = userDao.findUserByUserName(username);
         // 根据用户所含的角色信息查询对应的权限信息
-        RoleDo roleDo = roleDao.findByRoleIds(userDo.getRoleIds().split(","));
-        userDo.setAuthorityDoList(roleDo.getAuthorityDoList());
         return userDo;
     }
 
