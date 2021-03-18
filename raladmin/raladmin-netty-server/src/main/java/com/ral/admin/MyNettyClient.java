@@ -8,7 +8,6 @@ package com.ral.admin;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -46,7 +45,7 @@ public class MyNettyClient {
             // 连接服务端
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 6666).sync();
 
-            channelFuture.addListener((ChannelFutureListener) future -> {
+            channelFuture.addListener(future -> {
                 if (future.isSuccess()) {
                     log.info("连接成功...");
                 } else {

@@ -58,6 +58,7 @@ public class MyNettyServer {
             //对关闭通道进行监听
             channelFuture.channel().closeFuture().sync();
         } finally {
+            // 释放掉所有的资源，包括创建的线程
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
