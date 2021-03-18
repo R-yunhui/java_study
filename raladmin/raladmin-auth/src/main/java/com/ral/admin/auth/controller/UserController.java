@@ -79,7 +79,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
     public BaseResult<String> userLogin(String username, String password) {
-        userService.userLogin(username, password);
+        // userService.userLogin(username, password);
         return BaseResult.success("登录成功");
     }
 }
