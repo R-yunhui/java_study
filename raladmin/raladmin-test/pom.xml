@@ -9,8 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>raladmin-common</artifactId>
-    <name>公共模块</name>
+    <artifactId>raladmin-test</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,16 +17,23 @@
     </properties>
 
     <dependencies>
+        <!-- web 服务 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant</artifactId>
-            <version>1.10.9</version>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
         </dependency>
+
+<!--        <dependency>
+            <groupId>com.ral.admin</groupId>
+            <artifactId>raladmin-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>-->
     </dependencies>
 
 </project>
