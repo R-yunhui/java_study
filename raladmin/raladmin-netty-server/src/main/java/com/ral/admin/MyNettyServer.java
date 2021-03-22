@@ -28,6 +28,7 @@ public class MyNettyServer {
 
     public static void main(String[] args) throws InterruptedException {
         // 创建两个线程组 默认线程数为 cpu核心数 * 2
+        // bossGroup 用户服务端接收客户端的连接  workGroup 用户服务端接收客户端的数据读写 多Reactor 多线程
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
