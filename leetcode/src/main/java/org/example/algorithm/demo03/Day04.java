@@ -8,18 +8,36 @@ package org.example.algorithm.demo03;
  */
 public class Day04 {
 
-    public ListNode deleteDuplicates(ListNode head) {
+    public static void main(String[] args) {
+        ListNode listNode = new ListNode(1, new ListNode(1, new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5, null)))))));
+        nodeToString(listNode);
+
+        System.err.println();
+
+        ListNode newNode = deleteDuplicates(listNode);
+        nodeToString(newNode);
+    }
+
+    public static void nodeToString(ListNode node) {
+        if (null != node) {
+            System.err.println(node.val);
+            nodeToString(node.next);
+        }
+    }
+
+    public static ListNode deleteDuplicates(ListNode head) {
         if (head == null || head.next == null) {
             return head;
         }
         if (head.val == head.next.val) {
-            // 当当前节点的值和其下一节点的值不同 递归
+            // 直到当前节点的值和其下一节点的值不同 退出循环
             while (head.next != null && head.val == head.next.val) {
                 head = head.next;
             }
+            // 当当前节点的值和其下一节点的值相同 递归 修改当前节点
             return deleteDuplicates(head.next);
         } else {
-            // 当当前节点的值和其下一节点的值相同 递归
+            // 当当前节点的值和其下一节点的值不同 递归 修改其下一节点
             head.next = deleteDuplicates(head.next);
             return head;
         }
