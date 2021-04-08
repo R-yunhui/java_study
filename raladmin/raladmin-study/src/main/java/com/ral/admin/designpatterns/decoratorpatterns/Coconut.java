@@ -22,7 +22,7 @@ public class Coconut extends Ingredients {
     }
 
     @Override
-    public double cost() {
-        return 1.0 + beverage.cost();
+    public int cost() {
+        return 1 + beverage.cost();
     }
 }

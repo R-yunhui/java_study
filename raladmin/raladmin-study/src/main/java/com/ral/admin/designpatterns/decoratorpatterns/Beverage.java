@@ -25,5 +25,5 @@ public abstract class Beverage {
      * 支付方法
      * @return 价格
      */
-    public abstract double cost();
+    public abstract int cost();
 }

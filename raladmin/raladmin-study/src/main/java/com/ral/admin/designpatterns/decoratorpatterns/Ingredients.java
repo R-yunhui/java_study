@@ -8,26 +8,17 @@ package com.ral.admin.designpatterns.decoratorpatterns;
  */
 public abstract class Ingredients extends Beverage {
 
-    private Beverage beverage;
-
-    public Ingredients(Beverage beverage) {
-        this.beverage = beverage;
-    }
-
-    protected Ingredients() {
-    }
-
     /**
-     * 配料装饰者需要重写getDescription()方法
+     * 所有装饰者需要重写
      * @return 描述信息
      */
     @Override
     public abstract String getDescription();
 
     /**
-     * 配料装饰者需要重写cost()方法
-     * @return 价格
+     * 所有装饰者需要重写
+     * @return 描述信息
      */
     @Override
-    public abstract double cost();
+    public abstract int cost();
 }

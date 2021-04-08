@@ -3,22 +3,22 @@ package com.ral.admin.designpatterns.decoratorpatterns;
 /**
  * @Author: RenYunHui
  * @Date: 2021-03-29 21:40
- * @Describe:
+ * @Describe: 奶昔
  * @Modify:
  */
-public class Coffee extends Beverage {
+public class MilkShake extends Beverage {
 
-    public Coffee() {
-        this.description = "咖啡";
+    public MilkShake() {
+        this.description = "奶昔";
     }
 
     @Override
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     @Override
-    public double cost() {
-        return 5.0;
+    public int cost() {
+        return 20;
     }
 }

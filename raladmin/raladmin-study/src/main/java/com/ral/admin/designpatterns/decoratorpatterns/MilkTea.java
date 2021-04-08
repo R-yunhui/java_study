@@ -14,11 +14,11 @@ public class MilkTea extends Beverage {
 
     @Override
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     @Override
-    public double cost() {
-        return 7.0;
+    public int cost() {
+        return 10;
     }
 }

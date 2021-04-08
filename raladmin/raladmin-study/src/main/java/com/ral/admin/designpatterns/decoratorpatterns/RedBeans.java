@@ -22,7 +22,7 @@ public class RedBeans extends Ingredients {
     }
 
     @Override
-    public double cost() {
-        return 3.0 + beverage.cost();
+    public int cost() {
+        return 2 + beverage.cost();
     }
 }
