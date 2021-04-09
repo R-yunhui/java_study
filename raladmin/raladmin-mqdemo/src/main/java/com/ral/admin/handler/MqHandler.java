@@ -53,10 +53,10 @@ public class MqHandler implements RabbitTemplate.ConfirmCallback, RabbitTemplate
 
     private final RabbitTemplate rabbitTemplate;
     private final MqMsgDao mqMsgDao;
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Autowired
-    public MqHandler(RabbitTemplate rabbitTemplate, MqMsgDao mqMsgDao, RedisTemplate redisTemplate) {
+    public MqHandler(RabbitTemplate rabbitTemplate, MqMsgDao mqMsgDao, RedisTemplate<String, String> redisTemplate) {
         rabbitTemplate.setConfirmCallback(this);
         rabbitTemplate.setReturnCallback(this);
         this.rabbitTemplate = rabbitTemplate;
@@ -91,8 +91,9 @@ public class MqHandler implements RabbitTemplate.ConfirmCallback, RabbitTemplate
         try {
             Object o = redisTemplate.opsForValue().get(message.getMessageProperties().getCorrelationId());
             if (null == o) {
-                redisTemplate.opsForSet().add(message.getMessageProperties().getCorrelationId(), message.getBody());
-                log.debug("接收到topic_routing_key_one消息:{}", new String(message.getBody(), StandardCharsets.UTF_8));
+                String msg = new String(message.getBody(), StandardCharsets.UTF_8);
+                redisTemplate.opsForSet().add(message.getMessageProperties().getCorrelationId(), msg);
+                log.debug("接收到topic_routing_key_one消息:{}", msg);
                 //发生异常
                 int random = ThreadLocalRandom.current().nextInt(10);
                 if (random < 4) {
@@ -108,11 +109,11 @@ public class MqHandler implements RabbitTemplate.ConfirmCallback, RabbitTemplate
             log.error("接收消息失败");
             // 重新放入队列多次失败重新放回会导致队列堵塞或死循环问题
             // 解决方案，剔除此消息，然后记录到db中去补偿
-            channel.basicNack(deliveryTag, false, true);
+            // channel.basicNack(deliveryTag, false, false);
             // 异常处理
             dealError(message, e);
             // 拒绝消息
-            channel.basicReject(deliveryTag, true);
+            channel.basicReject(deliveryTag, false);
         }
     }
 
