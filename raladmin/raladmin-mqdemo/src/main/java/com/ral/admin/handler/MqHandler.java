@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.ral.admin.ex.ConsumerMqException;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.core.Message;
@@ -22,6 +23,7 @@ import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.google.common.util.concurrent.FutureCallback;
@@ -40,16 +42,19 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * MqHandler
- * @Description Mq处理类
+ *
  * @author renyunhui
- * @date 2021/4/9 15:06
  * @version 1.0
+ * @Description Mq处理类
+ * @date 2021/4/9 15:06
  */
 @Component
 @Slf4j
 public class MqHandler implements RabbitTemplate.ConfirmCallback, RabbitTemplate.ReturnCallback {
 
-    private static final ListeningExecutorService executorService = MoreExecutors.listeningDecorator(ThreadUtil.createThreadPool());
+    private static final ListeningExecutorService ERROR_EXECUTOR_SERVICE = MoreExecutors.listeningDecorator(ThreadUtil.createThreadPool("error-thread-pool-"));
+
+    private static final ListeningExecutorService MSG_EXECUTOR_SERVICE = MoreExecutors.listeningDecorator(ThreadUtil.createThreadPool("work-thread-pool-"));
 
     private final RabbitTemplate rabbitTemplate;
     private final MqMsgDao mqMsgDao;
@@ -66,10 +71,12 @@ public class MqHandler implements RabbitTemplate.ConfirmCallback, RabbitTemplate
 
     /**
      * 发送消息到指定的路由键
+     *
      * @param exchange 转发器
      * @param routeKey 路由键
-     * @param msg 消息
+     * @param msg      消息
      */
+
     public void sendMsg(String exchange, String routeKey, String msg) {
         MessageProperties messageProperties = new MessageProperties();
         messageProperties.setCorrelationId(IdUtil.fastSimpleUUID());
@@ -81,11 +88,8 @@ public class MqHandler implements RabbitTemplate.ConfirmCallback, RabbitTemplate
     @RabbitListener(bindings = {
             @QueueBinding(value = @Queue(value = "topic_queue01", durable = "true"),
                     exchange = @Exchange(value = "topic_exchange", type = ExchangeTypes.TOPIC),
-                    key = "routing_key_one"),
-            @QueueBinding(value = @Queue(value = "topic_queue03", durable = "true"),
-                    exchange = @Exchange(value = "topic_exchange", type = ExchangeTypes.TOPIC),
-                    key = "routing_key_three"
-            )})
+                    key = "routing_key_one")}
+    )
     public void receiverMqExchange(Channel channel, Message message) throws IOException {
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
         try {
@@ -93,12 +97,12 @@ public class MqHandler implements RabbitTemplate.ConfirmCallback, RabbitTemplate
             if (null == o) {
                 String msg = new String(message.getBody(), StandardCharsets.UTF_8);
                 redisTemplate.opsForSet().add(message.getMessageProperties().getCorrelationId(), msg);
-                log.debug("接收到topic_routing_key_one消息:{}", msg);
+                log.info("接收到topic_routing_key_one消息:{}", msg);
                 //发生异常
                 int random = ThreadLocalRandom.current().nextInt(10);
-                if (random < 4) {
+                if (random < 2) {
                     log.error("消息处理异常");
-                    throw new Exception("消息处理异常");
+                    throw new ConsumerMqException("消息处理异常");
                 }
                 // 告诉服务器收到这条消息 已经被我消费了 可以在队列删掉 这样以后就不会再发了 否则消息服务器以为这条消息没处理掉 后续还会在发
                 channel.basicAck(deliveryTag, false);
@@ -107,13 +111,12 @@ public class MqHandler implements RabbitTemplate.ConfirmCallback, RabbitTemplate
             log.info("该条数据:{}已经被消费过,请勿重新消费", message.getMessageProperties().getCorrelationId());
         } catch (Exception e) {
             log.error("接收消息失败");
-            // 重新放入队列多次失败重新放回会导致队列堵塞或死循环问题
-            // 解决方案，剔除此消息，然后记录到db中去补偿
-            // channel.basicNack(deliveryTag, false, false);
-            // 异常处理
-            dealError(message, e);
+            // 重新放入队列 多次失败重新放回会导致队列堵塞或死循环问题
+            // 解决方案，批量剔除此消息，然后记录到db中去补偿  第二个参数可选批量 第三个参数 是否重写入队
+            channel.basicNack(deliveryTag, false, false);
+            dealError(message);
             // 拒绝消息
-            channel.basicReject(deliveryTag, false);
+            // channel.basicReject(deliveryTag, false);
         }
     }
 
@@ -147,13 +150,14 @@ public class MqHandler implements RabbitTemplate.ConfirmCallback, RabbitTemplate
 
     /**
      * 确认消息是否发送到exchange
+     *
      * @param correlationData 回调消息的相关数据
-     * @param b ack - true  nack - false
-     * @param cause 可选错误原因 可能为空
+     * @param b               ack - true  nack - false
+     * @param cause           可选错误原因 可能为空
      */
     @Override
     public void confirm(CorrelationData correlationData, boolean b, String cause) {
-        // 回调的消息id 唯一标识
+        // correlationData.getId() -> 回调的消息id 唯一标识
         if (b) {
             log.info("消息发送成功");
             return;
@@ -163,10 +167,11 @@ public class MqHandler implements RabbitTemplate.ConfirmCallback, RabbitTemplate
 
     /**
      * 消息消费发生异常时回调
-     * @param message 返回的消息
-     * @param replyCode 回复代码
-     * @param replyText 回复文本
-     * @param exchange 交换器
+     *
+     * @param message    返回的消息
+     * @param replyCode  回复代码
+     * @param replyText  回复文本
+     * @param exchange   交换器
      * @param routingKey routingKey路由密钥
      */
     @Override
@@ -178,12 +183,12 @@ public class MqHandler implements RabbitTemplate.ConfirmCallback, RabbitTemplate
     /**
      * 消息处理异常
      */
-    private void dealError(Message message, Exception e) {
-        ListenableFuture<Object> listenableFuture = executorService.submit(() -> {
+    private void dealError(Message message) {
+        ListenableFuture<Object> listenableFuture = ERROR_EXECUTOR_SERVICE.submit(() -> {
             log.debug("接收消息:{} 处理失败,剔除此消息,将此次处理失败的消息入库后续进行补偿流程", message.getMessageProperties().getCorrelationId());
             mqMsgDao.insert(MqMsgDo.builder()
                     .msgId(message.getMessageProperties().getCorrelationId()).
-                            msg(new String(message.getBody(), StandardCharsets.UTF_8)).errorMsg(e.getMessage()).build());
+                            msg(new String(message.getBody(), StandardCharsets.UTF_8)).build());
             return "Mq消息异常处理成功";
         });
 
@@ -197,6 +202,6 @@ public class MqHandler implements RabbitTemplate.ConfirmCallback, RabbitTemplate
             public void onFailure(@Nullable Throwable throwable) {
                 log.error("Mq消息异常处理失败:" + throwable);
             }
-        }, executorService);
+        }, ERROR_EXECUTOR_SERVICE);
     }
 }

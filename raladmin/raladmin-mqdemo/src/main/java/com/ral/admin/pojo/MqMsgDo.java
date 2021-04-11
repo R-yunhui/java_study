@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
  * @date 2021/4/9 16:24
  * @version 1.0
  */
-@TableName(value = "test")
+@TableName(value = "mq_test")
 @Data
 @Builder
 @AllArgsConstructor
@@ -41,8 +41,4 @@ public class MqMsgDo {
     /** 消息 */
     @TableField(value = "msg")
     private String msg;
-
-    /** 错误消息 */
-    @TableField(value = "error_msg")
-    private String errorMsg;
 }

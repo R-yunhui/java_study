@@ -34,8 +34,8 @@ public class ThreadUtil {
     /** 线程池中工作队列的容量 */
     private static final Integer MAX_WORK_QUEUE_SIZE = 1024;
 
-    public static ThreadPoolExecutor createThreadPool() {
-        ThreadFactory namedFactory = new ThreadFactoryBuilder().setNameFormat("work-thread-pool-").build();
+    public static ThreadPoolExecutor createThreadPool(String threadName) {
+        ThreadFactory namedFactory = new ThreadFactoryBuilder().setNameFormat(threadName).build();
         return new ThreadPoolExecutor(CORE_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE_TIME, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(MAX_WORK_QUEUE_SIZE), namedFactory, new ThreadPoolExecutor.AbortPolicy());
     }

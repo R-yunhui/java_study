@@ -25,3 +25,12 @@ acknowledge-mode:auto
 acknowledge-mode:manual
 ```
 
+
+
+#### docker启动rabbitMq访问web页面
+
+```
+进入容器：docker exec -it 容器ID /bin/bash 
+启动 abbitmq-plugins enable rabbitmq_management
+```
+
