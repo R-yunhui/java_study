@@ -1,9 +1,3 @@
-/*
- * @projectName raladmin
- * @package com.ral.admin.thread
- * @className com.ral.admin.thread.ThreadLocalDemp
- * @copyright Copyright 2020 Thunisoft, Inc All rights reserved.
- */
 package com.ral.admin.thread;
 
 /**
