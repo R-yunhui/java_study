@@ -50,6 +50,9 @@ public class LockDemo02 {
         LockDemo02 lockDemo02 = new LockDemo02(10);
         for (int i = 0; i < lockDemo02.maxSize; i++) {
             consumerPool.execute(lockDemo02.new Consumer());
+        }
+
+        for (int i = 0; i < lockDemo02.maxSize; i++) {
             producerPool.execute(lockDemo02.new Producer());
         }
         consumerPool.shutdown();
