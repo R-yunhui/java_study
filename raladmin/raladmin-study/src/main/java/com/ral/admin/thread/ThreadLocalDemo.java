@@ -15,7 +15,7 @@ public class ThreadLocalDemo {
         sThreadLocal.set("这是在主线程中");
         System.out.println("线程名字：" + Thread.currentThread().getName() + "---" + sThreadLocal.get());
 
-        //线程a
+        // 线程a
         new Thread(() -> {
             // 1.获取当前线程  Thread t = Thread.currentThread();
             // 2.获取当前线程的ThreadLocalMap  ThreadLocalMap map = getMap(t);
@@ -24,13 +24,13 @@ public class ThreadLocalDemo {
             System.out.println("线程名字：" + Thread.currentThread().getName() + "---" + sThreadLocal.get());
         }, "线程a").start();
 
-        //线程b
+        // 线程b
         new Thread(() -> {
             sThreadLocal.set("这是在线程b中");
             System.out.println("线程名字：" + Thread.currentThread().getName() + "---" + sThreadLocal.get());
         }, "线程b").start();
 
-        //线程c
+        // 线程c
         new Thread(() -> {
             sThreadLocal.set("这是在线程c中");
             System.out.println("线程名字：" + Thread.currentThread().getName() + "---" + sThreadLocal.get());

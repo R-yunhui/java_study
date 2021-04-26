@@ -16,6 +16,7 @@
         <module>raladmin-study</module>
         <module>raladmin-netty-server</module>
         <module>raladmin-mqdemo</module>
+        <module>raladmin-algorithm</module>
     </modules>
 
     <!-- 父依赖 SpringBoot 2.2.2.RELEASE -->
