@@ -6,6 +6,8 @@
  */
 package org.ral.alibaba.controller;
 
+import org.ral.alibaba.service.TestService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +26,12 @@ public class WebController {
 
     @Value("${server.port}")
     private String serverPort;
+    @Autowired
+    private TestService testService;
 
     @GetMapping(value = "/sayPort")
     public String sayPort() {
-        return "hello world - " + serverPort;
+        return testService.say(serverPort);
     }
 
 }

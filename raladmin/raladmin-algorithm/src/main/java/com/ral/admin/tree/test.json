@@ -1,0 +1,64 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "name": "海淀区",
+            "pid": 2,
+            "id": 4,
+            "isLeaf": true
+          },
+          {
+            "name": "顺义区",
+            "pid": 2,
+            "id": 5,
+            "isLeaf": true
+          }
+        ],
+        "name": "北京市",
+        "pid": 1,
+        "id": 2,
+        "isLeaf": false
+      },
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "name": "武侯区",
+                "pid": 6,
+                "id": 8,
+                "isLeaf": true
+              },
+              {
+                "name": "高新区",
+                "pid": 6,
+                "id": 9,
+                "isLeaf": true
+              }
+            ],
+            "name": "成都市",
+            "pid": 3,
+            "id": 6,
+            "isLeaf": false
+          },
+          {
+            "name": "绵阳市",
+            "pid": 3,
+            "id": 7,
+            "isLeaf": true
+          }
+        ],
+        "name": "四川省",
+        "pid": 1,
+        "id": 3,
+        "isLeaf": false
+      }
+    ],
+    "name": "中国",
+    "pid": 0,
+    "id": 1,
+    "isLeaf": false
+  }
+]
