@@ -1,0 +1,18 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: nacos-8081
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        group: nacos-test
+
+# 公开所有网络端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
