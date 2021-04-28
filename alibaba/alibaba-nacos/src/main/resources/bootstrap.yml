@@ -1,0 +1,16 @@
+server:
+  port: 8081
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: nacos-8081
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+      discovery:
+        server-addr: localhost:8848
+        group: nacos-demo

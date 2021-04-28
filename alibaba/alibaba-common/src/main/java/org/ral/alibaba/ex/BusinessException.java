@@ -13,7 +13,7 @@ package org.ral.alibaba.ex;
  * @date 2021/4/28 13:33
  * @version 1.0
  */
-public class BusinessException extends Exception {
+public class BusinessException extends RuntimeException {
 
     public BusinessException() {
         super();

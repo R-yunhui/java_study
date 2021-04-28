@@ -33,7 +33,7 @@ public class UserServiceImpl implements IUserService {
     public String findUserById(int id) {
         if (0 == id) {
             log.info("根据用户ID:{}查询用户信息失败", id);
-            throw new RuntimeException("根据ID查询用户信息失败");
+            throw new BusinessException("根据ID查询用户信息失败");
         }
         return "查询到符合条件的用户信息";
     }
