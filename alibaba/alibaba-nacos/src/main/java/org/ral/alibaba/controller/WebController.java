@@ -6,32 +6,29 @@
  */
 package org.ral.alibaba.controller;
 
-import org.ral.alibaba.service.TestService;
+import org.ral.alibaba.common.BaseResult;
+import org.ral.alibaba.ex.BusinessException;
+import org.ral.alibaba.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * WebController
  * @Description
  * @author renyunhui
- * @date 2021/4/27 16:49
+ * @date 2021/4/28 11:30
  * @version 1.0
  */
 @RestController
-@RequestMapping(value = "/api/v1/web")
 public class WebController {
 
-    @Value("${server.port}")
-    private String serverPort;
     @Autowired
-    private TestService testService;
+    private IUserService userService;
 
-    @GetMapping(value = "/sayPort")
-    public String sayPort() {
-        return testService.say(serverPort);
+    @GetMapping(value = "/findUserById/{id}")
+    public BaseResult<String> findUserById(@PathVariable(value = "id") int id) {
+        return BaseResult.success(userService.findUserById(id));
     }
-
 }

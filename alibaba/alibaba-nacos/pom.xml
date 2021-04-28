@@ -17,6 +17,13 @@
     </properties>
 
     <dependencies>
+        <!-- 公共模块 -->
+        <dependency>
+            <groupId>org.ral.alibaba</groupId>
+            <artifactId>alibaba-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- web服务 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
