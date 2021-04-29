@@ -6,8 +6,6 @@
  */
 package org.ral.alibaba.service;
 
-import org.ral.alibaba.ex.BusinessException;
-
 /**
  * UserService
  * @Description

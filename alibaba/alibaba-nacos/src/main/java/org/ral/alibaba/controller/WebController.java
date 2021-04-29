@@ -29,17 +29,16 @@ public class WebController {
 
     @Autowired
     private IUserService userService;
-
-    @Value("${user.name}")
+    @Value("${username}")
     private String username;
 
     @GetMapping(value = "/findUserById/{id}")
     public BaseResult<String> findUserById(@PathVariable(value = "id") int id) {
-        return BaseResult.success(userService.findUserById(id) + "  " + username);
+        return BaseResult.success(userService.findUserById(id));
     }
 
     @GetMapping(value = "/getUserInfoByConfig")
     public BaseResult<String> getUserInfoByConfig() {
-        return BaseResult.success("从nacos获取的配置的用户姓名为：" + username);
+        return BaseResult.success("从nacos获取的配置的用户信息为：" + username);
     }
 }

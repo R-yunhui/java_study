@@ -3,14 +3,54 @@ server:
 
 spring:
   profiles:
+    # 指定不同环境的配置文件
     active: dev
   application:
-    name: nacos-8081
+    name: nacos-config
   cloud:
     nacos:
       config:
+        # ${spring.application.name}-${spring.profiles.active}.${file-extension:properties}   => nacos-config的dataid
         server-addr: localhost:8848
         file-extension: yaml
+        # 指定命名空间（主要实现隔离） 通过 namespace + group + dataId
+        namespace: 3c3c482f-f6c3-4ca7-b408-d7f5cb713908
+        # 指定分组 将不同的微服务划分到同一个分组
+        group: DEFAULT_GROUP
       discovery:
         server-addr: localhost:8848
         group: nacos-demo
+    sentinel:
+      transport:
+        # sentinel dashboard 地址
+        dashboard: localhost:8080
+        # 默认端口 如何被占用 会+1进行扫描 直到找到未被占用的
+        port: 8719
+      # 配置规则持久化到nacos
+      datasource:
+        # 流控策略
+        ds1:
+          nacos:
+            namespace: 3c3c482f-f6c3-4ca7-b408-d7f5cb713908
+            server-addr: ${spring.cloud.nacos.config.server-addr}
+            group-id: ${spring.cloud.nacos.config.group}
+            data-id: sentine-flow-rule
+            data-type: json
+            rule-type: flow
+        # 降级策略
+        ds2:
+          nacos:
+            namespace: 3c3c482f-f6c3-4ca7-b408-d7f5cb713908
+            server-addr: ${spring.cloud.nacos.config.server-addr}
+            group-id: ${spring.cloud.nacos.config.group}
+            data-id: sentine-degrade-rule
+            data-type: json
+            rule-type: degrade
+
+
+# 公开所有网络端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

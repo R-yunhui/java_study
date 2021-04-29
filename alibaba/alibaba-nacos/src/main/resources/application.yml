@@ -1,6 +1,0 @@
-# 公开所有网络端点
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
