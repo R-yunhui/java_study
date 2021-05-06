@@ -32,8 +32,10 @@ public enum ApiResultEnum {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 500, "Internal Server Error"),
 
     /** 认证失败 */
-    AUTHENTICATION_FAILED(HttpStatus.FORBIDDEN, 403, "认证失败，用户名或密码错误");
+    AUTHENTICATION_FAILED(HttpStatus.FORBIDDEN, 403, "认证失败，用户名或密码错误"),
 
+    /** 限流失败 */
+    LIMIT_FAILED(HttpStatus.UNAUTHORIZED, 401, "请求过于繁忙请稍后再试！");
 
     /** HTTP 状态码 */
     HttpStatus status;

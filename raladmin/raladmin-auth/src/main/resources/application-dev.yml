@@ -10,7 +10,7 @@ spring:
   # consul 配置
   cloud:
     consul:
-      host: 172.25.8.70
+      host: 192.168.0.106
       port: 8500
       discovery:
         service-name: ${spring.application.name}
@@ -21,7 +21,7 @@ spring:
   datasource:
     # 初始化sql 脚本
     druid:
-      url: jdbc:mysql://172.25.8.70:3306/raladmin?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://192.168.0.106:3306/raladmin?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       username: root
       password: ryh123.0
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -69,7 +69,7 @@ spring:
       time-to-live: -1
   redis:
     database: 0
-    host: 172.25.8.70
+    host: 192.168.0.106
     port: 6379
     password: ryh123.0
 

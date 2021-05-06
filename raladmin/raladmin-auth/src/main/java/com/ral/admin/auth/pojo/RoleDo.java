@@ -2,7 +2,12 @@ package com.ral.admin.auth.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,14 +15,24 @@ import lombok.Data;
 
 /**
  * RoleDo
- * @Description RoleDo 角色表
+ * @Description: 角色信息实体表
+ *
  * @author renyunhui
- * @date 2021/2/1 15:50
+ * @date 2021/2/3 9:57
  * @version 1.0
  */
 @ApiModel(value="角色表")
 @Data
-public class RoleDo implements Serializable {
+@TableName(value = "db_role")
+public class RoleDo implements Serializable, GrantedAuthority {
+
+    /**
+     * 主键ID
+     */
+    @ApiModelProperty(value="主键ID")
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+
     /**
      * 角色ID
      */
@@ -31,10 +46,10 @@ public class RoleDo implements Serializable {
     private String roleName;
 
     /**
-     * 所含权限码
+     * 备注
      */
-    @ApiModelProperty(value="所含权限码")
-    private String authorityCodes;
+    @ApiModelProperty(value="备注")
+    private String remark;
 
     /**
      * 状态 1 - 启用 2 - 禁用 3 - 已删除
@@ -66,16 +81,10 @@ public class RoleDo implements Serializable {
     @ApiModelProperty(value="创建时间")
     private Date updateTime;
 
-    /**
-     * 最后修改方式 1 - 新增 2 - 修改
-     */
-    @ApiModelProperty(value="最后修改方式 1 - 新增 2 - 修改")
-    private Integer modifyMethod;
-
-    /**
-     * 对应的权限信息
-     */
-    private List<AuthorityDo> authorityDoList;
-
     private static final long serialVersionUID = 1L;
+
+    @Override
+    public String getAuthority() {
+        return this.roleName;
+    }
 }

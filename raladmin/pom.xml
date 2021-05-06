@@ -12,6 +12,12 @@
     <modules>
         <module>raladmin-common</module>
         <module>raladmin-auth</module>
+        <module>raladmin-test</module>
+        <module>raladmin-study</module>
+        <module>raladmin-netty-server</module>
+        <module>raladmin-mqdemo</module>
+        <module>raladmin-algorithm</module>
+        <module>raladmin-redis</module>
     </modules>
 
     <!-- 父依赖 SpringBoot 2.2.2.RELEASE -->
@@ -40,7 +46,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <guava.version>30.1-jre</guava.version>
-        <hutool.version>5.5.7</hutool.version>
+        <hutool.version>4.1.9</hutool.version>
         <swagger.version>2.9.2</swagger.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
         <druid.version>1.1.10</druid.version>

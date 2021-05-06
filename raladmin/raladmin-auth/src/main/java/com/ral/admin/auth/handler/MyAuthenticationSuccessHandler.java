@@ -14,9 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
-import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -33,8 +35,13 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("登录成功");
-        response.setContentType("application/json;charset=utf-8");
-        // writeValueAsString：将java对象序列化为字符串
-        response.getWriter().write(JSONUtil.toJsonStr(authentication));
+        // 返回登录前的页面
+        RequestCache requestCache = new HttpSessionRequestCache();
+        SavedRequest savedRequest = requestCache.getRequest(request,response);
+        if (null == savedRequest) {
+            response.sendRedirect("/auth-web/index");
+        }else {
+            response.sendRedirect(savedRequest.getRedirectUrl());
+        }
     }
 }

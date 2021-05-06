@@ -6,6 +6,7 @@
  */
 package com.ral.admin.auth.controller;
 
+import com.ral.admin.auth.pojo.UserDo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ral.admin.auth.pojo.UserDo;
 import com.ral.admin.auth.service.IUserService;
 import com.ral.admin.common.BaseResult;
 
@@ -79,7 +79,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
     public BaseResult<String> userLogin(String username, String password) {
-        userService.userLogin(username, password);
+        // userService.userLogin(username, password);
         return BaseResult.success("登录成功");
     }
 }
