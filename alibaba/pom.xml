@@ -12,6 +12,7 @@
         <module>alibaba-nacos</module>
         <module>alibaba-nacos-consumer</module>
         <module>alibaba-common</module>
+        <module>alibaba-gateway</module>
     </modules>
 
     <parent>
